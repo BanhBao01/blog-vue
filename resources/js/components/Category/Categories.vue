@@ -2,7 +2,10 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div v-if="isLoading">
+                
+            </div>
+            <div v-if="!isLoading" class="card">
                 <div class="card-header header-custom">
                     <h5>Categories</h5>
                     <div>
@@ -38,9 +41,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
+                                    <div class="modal-footer" v-if="isDelete">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" @click="create">Save</button>
+                                        <button type="button" class="btn btn-danger">Delete</button>
+                                        <button type="button" v-if="category.name != '' & category.description != ''" class="btn btn-primary" @click="create">Save</button>
+                                    </div>
+                                    <div class="modal-footer" v-if="!isDelete">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" v-if="category.name != '' & category.description != ''" class="btn btn-primary" @click="create">Save</button>
                                     </div>
                                 </div>
                             </div>
@@ -60,23 +68,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
+                                <tr @click="edit(idx,category)" v-for="(category,idx) in listCategories" :key="idx">
+                                    <th scope="row">{{ idx +1 }}</th>
+                                    <td>{{ category.name }}</td>
+                                    <td>{{ category.description }}</td>
+                                    <td v-if="category.status == 1">Public</td>
+                                    <td v-if="category.status == 0">Not Public</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -97,20 +94,50 @@ export default {
                 description: '',
                 status: 1
             },
-            listCategories: []
+            listCategories: [],
+            isLoading: true,
+            isDelete: false
         }
     },
     methods: {
+        hideModal () {
+            this.isDelete = false
+            $('.modal').modal('hide')
+            $('.modal-backdrop').removeClass('show')
+        },
+        showModal () {
+            $('.modal').modal('show');
+        },
         create () {
             this.$http.post('/api/categories' ,this.category)
                 .then(response => {
-                    console.log(response)
                     this.listCategories.push(response.body)
-                    $('.modal').modal('hide')
-                    console.log()
+                    this.hideModal()
+                    this.category = {
+                        name: '',
+                        description: '',
+                        status: 1
+                    }
+                })
+        },
+        edit (idx,category) {
+            this.showModal()
+            this.category = category
+            this.isDelete = true
+        },
+        getData () {
+            this.$http.get('/api/categories')
+                .then(response => {
+                    this.listCategories = response.body
+                })
+                .finally(response => {
+                    this.isLoading = false
                 })
         }
-    }
+    },
+    mounted() {
+        this.getData()
+    },
 }
 </script>
 
@@ -123,4 +150,6 @@ export default {
 .modal-content {
     border-radius: unset;
 }
+
+
 </style>

@@ -17,7 +17,7 @@ Vue.use(Auth)
 Router.beforeEach(
     (to, from, next) => {
         if (to.matched.some(record => record.meta.forVisited)) {
-            if (Vue.auth.getToken() != null) {
+            if (Vue.auth.isLogin()) {
                 next({
                     path: "/admin"
                 })
@@ -25,7 +25,7 @@ Router.beforeEach(
                 next()
             }
         } else if (to.matched.some(record => record.meta.forAuth)) {
-            if (Vue.auth.getToken() == null) {
+            if (!Vue.auth.isLogin()) {
                 next({
                     path: "/admin/login"
                 })
