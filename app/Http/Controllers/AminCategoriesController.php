@@ -99,7 +99,7 @@ class AminCategoriesController extends Controller
     public function destroy($id)
     {
         try {
-            Category::destroy($id);
+            return Category::destroy($id);
         } catch (\Throwable $th) {
             return response([
                 'code' => '500',

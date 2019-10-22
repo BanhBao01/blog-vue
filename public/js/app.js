@@ -2071,7 +2071,9 @@ __webpack_require__.r(__webpack_exports__);
       },
       listCategories: [],
       isLoading: true,
-      isDelete: false
+      isDelete: false,
+      index: '',
+      idCategory: ''
     };
   },
   methods: {
@@ -2102,6 +2104,20 @@ __webpack_require__.r(__webpack_exports__);
       this.showModal();
       this.category = category;
       this.isDelete = true;
+      this.index = idx;
+      this.idCategory = category.id;
+    },
+    remove: function remove() {
+      this.listCategories.splice(this.index, 1);
+      this.hideModal();
+      this.category = {
+        name: '',
+        description: '',
+        status: 1
+      };
+      this.$http["delete"]('/api/categories/' + this.idCategory).then(function (response) {
+        console.log(response.body);
+      });
     },
     getData: function getData() {
       var _this2 = this;
@@ -38558,7 +38574,8 @@ var render = function() {
                                     "button",
                                     {
                                       staticClass: "btn btn-danger",
-                                      attrs: { type: "button" }
+                                      attrs: { type: "button" },
+                                      on: { click: _vm.remove }
                                     },
                                     [_vm._v("Delete")]
                                   ),
