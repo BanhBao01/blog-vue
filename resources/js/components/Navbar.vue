@@ -48,6 +48,7 @@ export default {
     data () {
         return {
             links: [
+                {path: '/admin/posts', name: 'Posts'},
                 {path: '/admin/categories', name: 'Categories'},
                 {path: '/admin/tags', name: 'Tags'},
                 {path: '/admin/login', name: 'Login'},
