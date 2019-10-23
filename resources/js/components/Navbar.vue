@@ -15,12 +15,16 @@
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
-                    <router-link v-for="(link,idx) in links" :key="idx" :class="nav-item" :to="link.path" tag="li">
+                    <!-- <router-link v-for="(link,i) in links" :key="i" :class="nav-item" :to="link.path" tag="li">
                         <a class="nav-link">{{ link.name }}</a>
-                    </router-link>
+                    </router-link> -->
                     
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Register</a>
+                    <li class="nav-item" v-for="(link,i) in links" :key="i">
+                        <router-link :to="link.path" tag="span">
+                            <li class="nav-item">
+                                <a class="nav-link">{{ link.name }}</a>
+                            </li>
+                        </router-link>
                     </li>
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -42,8 +46,9 @@ export default {
     data () {
         return {
             links: [
-                {path: 'categories', name: 'Categories'},
-                {path: 'login', name: 'Login'}
+                {path: '/admin/categories', name: 'Categories'},
+                {path: '/admin/tags', name: 'Tags'},
+                {path: '/admin/login', name: 'Login'},
             ]
         }
     }

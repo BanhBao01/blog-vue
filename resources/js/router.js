@@ -4,6 +4,7 @@ import AdminMaster from './components/AdminMaster'
 import Login from './components/Auth/Login'
 import Dashboard from './components/Dashboard.vue'
 import Categories from './components/Category/Categories.vue'
+import Tags from './components/Tag/Tags.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,7 @@ const router = new VueRouter({
             { path: 'login', component: Login, meta: { forVisited: true } },
             { path: '', component: Dashboard, meta: { forAuth: true } },
             { path: 'categories', component: Categories, meta: { forAuth: true } },
+            { path: 'tags', component: Tags, meta: { forAuth: true } },
         ]
     }, ]
 })

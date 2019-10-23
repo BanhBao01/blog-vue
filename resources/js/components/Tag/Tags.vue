@@ -7,11 +7,11 @@
             </div>
             <div v-if="!isLoading" class="card">
                 <div class="card-header header-custom">
-                    <h5>Categories</h5>
+                    <h5>Tags</h5>
                     <div>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modelId">
-                            New Category
+                            New Tag
                         </button>
 
                         <!-- Modal -->
@@ -19,36 +19,32 @@
                             <div class="modal-dialog modal-md" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">New Category</h5>
-                                        <button type="button" class="close" @click="hideModal()" aria-label="Close">
+                                        <h5 class="modal-title">New Tag</h5>
+                                        <button type="button" class="close" @click="hideModal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <label for="">Name Category</label>
-                                            <input type="text" class="form-control" v-model="category.name" name="" id="" aria-describedby="helpId" placeholder="">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Description Category</label>
-                                            <textarea type="text" class="form-control" v-model="category.description" name="" id="" aria-describedby="helpId" placeholder=""></textarea>
+                                            <label for="">Name Tag</label>
+                                            <input type="text" v-model="tag.name" class="form-control"  name="" id="" aria-describedby="helpId" placeholder="">
                                         </div>
                                         <div class="form-group">
                                             <label for="">Status</label>
-                                            <select class="form-control" v-model="category.status" name="" id="">
+                                            <select class="form-control" v-model="tag.status" name="" id="">
                                                 <option value="1">Show</option>
                                                 <option value="0">Hide</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="modal-footer" v-if="isDelete">
-                                        <button type="button" class="btn btn-secondary" @click="hideModal()">Close</button>
+                                        <button type="button" class="btn btn-secondary" @click="hideModal">Close</button>
                                         <button type="button" class="btn btn-danger" @click="remove">Delete</button>
-                                        <button type="button" v-if="category.name != '' & category.description != ''" class="btn btn-primary" @click="update">Save</button>
+                                        <button type="button" class="btn btn-primary" @click="update">Save</button>
                                     </div>
                                     <div class="modal-footer" v-if="!isDelete">
                                         <button type="button" class="btn btn-secondary" @click="hideModal()">Close</button>
-                                        <button type="button" v-if="category.name != '' & category.description != ''" class="btn btn-primary" @click="create">Save</button>
+                                        <button type="button" class="btn btn-primary" @click="create">Save</button>
                                     </div>
                                 </div>
                             </div>
@@ -62,18 +58,16 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr @click="edit(idx,category)" v-for="(category,idx) in listCategories" :key="idx">
-                                    <th scope="row">{{ idx +1 }}</th>
-                                    <td>{{ category.name }}</td>
-                                    <td>{{ category.description }}</td>
-                                    <td v-if="category.status == 1">Public</td>
-                                    <td v-if="category.status == 0">Not Public</td>
+                                <tr v-for="(t,idx) in listTags" :key="idx" @click="edit(idx,t)">
+                                    <th scope="row">{{ idx+1 }}</th>
+                                    <td>{{ t.name }}</td>
+                                    <td v-if="t.status = 1">Public</td>
+                                    <td v-if="t.status = 0">Not Public</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -87,18 +81,17 @@
 
 <script>
 export default {
-    data() {
+    data () {
         return {
-            category: {
+            isLoading: true,
+            listTags: [],
+            tag: {
                 name: '',
-                description: '',
                 status: 1
             },
-            listCategories: [],
-            isLoading: true,
             isDelete: false,
-            index: '',
-            idCategory: ''
+            idTag: '',
+            idx: ''
         }
     },
     methods: {
@@ -110,54 +103,46 @@ export default {
                 confirmButtonText: 'Ok'
             });
         },
-        hideModal() {
-            this.category = {
+        hideModal () {
+            this.tag = {
                         name: '',
-                        description: '',
                         status: 1
                     }
             this.isDelete = false
             $('.modal').modal('hide')
             $('.modal-backdrop').removeAttr('class')
         },
-        showModal() {
-            $('.modal').modal('show');
+        showModal () {
+            $('.modal').modal('show')
         },
-        create() {
-            this.$http.post('/api/categories', this.category)
-                .then(response => {
-                    this.listCategories.push(response.body)
+        create () {
+            this.$http.post('/api/tags',this.tag)
+                .then(response=>{
+                    this.listTags.push(response.body)
                     this.hideModal()
-                    this.category = {
-                        name: '',
-                        description: '',
-                        status: 1
-                    }
-                    this.showAlert('Success', 'success', 'Add New Category Success')
+                    this.showAlert('Success', 'success', 'Add New Tag Success')
                 })
         },
-        edit(idx, category) {
+        edit (idx,t) {
             this.showModal()
-            this.category = category
             this.isDelete = true
-            this.index = idx
-            this.idCategory = category.id
+            this.idx = idx
+            this.idTag = t.id
+            this.tag = {
+                'name': t.name,
+                'status': 1
+            }
         },
-        update() {
-            this.listCategories.splice(this.index, 1)
-            this.listCategories.splice(this.index, 0, this.category)
-            this.$http.put('/api/categories/' + this.idCategory, this.category)
+        update () {
+            this.$http.put('/api/tags/' + this.idTag , this.tag)
                 .then(response => {
+                    this.listTags.splice(this.idx, 1)
+                    this.listTags.splice(this.idx, 0 ,response.body)
                     this.hideModal()
-                    this.showAlert('Success', 'success', 'Update Category Success')
-                    this.category = {
-                        name: '',
-                        description: '',
-                        status: 1
-                    }
+                    this.showAlert('Success', 'success', 'Update Tag Success')
                 })
         },
-        remove() {
+        remove () {
             this.$swal({
                 title: 'Are you sure?',
                 text: "You want to delete this!",
@@ -168,26 +153,22 @@ export default {
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.value) {
-                    this.listCategories.splice(this.index, 1)
-                    this.hideModal()
-                    this.category = {
-                        name: '',
-                        description: '',
-                        status: 1
-                    }
-                    this.$http.delete('/api/categories/' + this.idCategory)
-                        .then(response => {
-                            this.showAlert('Success', 'success', 'Delete Category Success')
-                        })
+                    this.listTags.splice(this.idx,1)
+                    this.$http.delete('/api/tags/' + this.idTag)
+                    .then(response => {
+                        this.showAlert('Success', 'success', 'Delete Tag Success')
+                        this.hideModal()
+                    })   
                 }
             })
+             
         },
-        getData() {
-            this.$http.get('/api/categories')
-                .then(response => {
-                    this.listCategories = response.body
+        getData () {
+            this.$http.get('/api/tags')
+                .then(response=>{
+                    this.listTags = response.body
                 })
-                .finally(response => {
+                .finally(response=>{
                     this.isLoading = false
                 })
         }

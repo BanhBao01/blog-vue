@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Category;
+use App\Tag;
 
-class AminCategoriesController extends Controller
+class AdminTagsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class AminCategoriesController extends Controller
      */
     public function index()
     {
-        return Category::all(); 
+        return Tag::all();
     }
 
     /**
@@ -35,15 +35,8 @@ class AminCategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            return Category::create($request->all());
-        } catch (\Throwable $th) {
-            return response([
-                'code' => '500',
-                'message_dev' => 'false',
-                'message_client' => 'Create Category Error'
-            ]);
-        }
+        $tag = Tag::create($request->all());
+        return $tag;
     }
 
     /**
@@ -54,7 +47,7 @@ class AminCategoriesController extends Controller
      */
     public function show($id)
     {
-        return Category::findOrfail($id);
+        //
     }
 
     /**
@@ -77,17 +70,9 @@ class AminCategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            $category = Category::findOrfail($id);
-            $category->update($request->all());
-            return $category;
-        } catch (\Throwable $th) {
-            return response([
-                'code' => '500',
-                'message_dev' => 'false',
-                'message_client' => 'Update Category Error'
-            ]);
-        }
+        $tag = Tag::findOrfail($id);
+        $tag->update($request->all());
+        return $tag;
     }
 
     /**
@@ -98,14 +83,6 @@ class AminCategoriesController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            return Category::destroy($id);
-        } catch (\Throwable $th) {
-            return response([
-                'code' => '500',
-                'message_dev' => 'false',
-                'message_client' => 'Delete Category Error'
-            ]);
-        }
+        return Tag::destroy($id);
     }
 }
