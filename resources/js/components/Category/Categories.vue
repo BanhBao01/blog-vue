@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div v-if="isLoading">
-                
+
             </div>
             <div v-if="!isLoading" class="card">
                 <div class="card-header header-custom">
@@ -102,16 +102,24 @@ export default {
         }
     },
     methods: {
-        hideModal () {
+        showAlert(title, type, message) {
+            this.$swal({
+                title: title,
+                text: message,
+                type: type,
+                confirmButtonText: 'Ok'
+            });
+        },
+        hideModal() {
             this.isDelete = false
             $('.modal').modal('hide')
-            $('.modal-backdrop').removeClass('show')
+            $('.modal-backdrop').removeAttr('class')
         },
-        showModal () {
+        showModal() {
             $('.modal').modal('show');
         },
-        create () {
-            this.$http.post('/api/categories' ,this.category)
+        create() {
+            this.$http.post('/api/categories', this.category)
                 .then(response => {
                     this.listCategories.push(response.body)
                     this.hideModal()
@@ -120,37 +128,56 @@ export default {
                         description: '',
                         status: 1
                     }
+                    this.showAlert('Success', 'success', 'Add New Category Success')
                 })
         },
-        edit (idx,category) {
+        edit(idx, category) {
             this.showModal()
             this.category = category
             this.isDelete = true
             this.index = idx
             this.idCategory = category.id
         },
-        update () {
-            this.listCategories.splice(this.index,1)
-            this.listCategories.splice(this.index,0,this.category)
-            this.$http.put('/api/categories/' + this.idCategory , this.category)
+        update() {
+            this.listCategories.splice(this.index, 1)
+            this.listCategories.splice(this.index, 0, this.category)
+            this.$http.put('/api/categories/' + this.idCategory, this.category)
                 .then(response => {
-                    this.hideModal()        
-                })
-        },
-        remove () {
-            this.listCategories.splice(this.index,1)
-            this.hideModal()
-            this.category = {
+                    this.hideModal()
+                    this.showAlert('Success', 'success', 'Update Category Success')
+                    this.category = {
                         name: '',
                         description: '',
                         status: 1
                     }
-            this.$http.delete('/api/categories/' + this.idCategory)
-                .then(response => {
-                    console.log(response.body)
                 })
         },
-        getData () {
+        remove() {
+            this.$swal({
+                title: 'Are you sure?',
+                text: "You want to delete this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    this.listCategories.splice(this.index, 1)
+                    this.hideModal()
+                    this.category = {
+                        name: '',
+                        description: '',
+                        status: 1
+                    }
+                    this.$http.delete('/api/categories/' + this.idCategory)
+                        .then(response => {
+                            this.showAlert('Success', 'success', 'Delete Category Success')
+                        })
+                }
+            })
+        },
+        getData() {
             this.$http.get('/api/categories')
                 .then(response => {
                     this.listCategories = response.body
@@ -175,6 +202,4 @@ export default {
 .modal-content {
     border-radius: unset;
 }
-
-
 </style>

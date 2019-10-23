@@ -11,8 +11,11 @@ import VueResource from 'vue-resource'
 import App from './App.vue'
 import Router from './router.js'
 import Auth from './packages/Auth.js'
+import VueSweetalert2 from 'vue-sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css';
 Vue.use(VueResource)
 Vue.use(Auth)
+Vue.use(VueSweetalert2)
 
 Router.beforeEach(
     (to, from, next) => {
