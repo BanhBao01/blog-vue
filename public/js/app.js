@@ -2107,6 +2107,15 @@ __webpack_require__.r(__webpack_exports__);
       this.index = idx;
       this.idCategory = category.id;
     },
+    update: function update() {
+      var _this2 = this;
+
+      this.listCategories.splice(this.index, 1);
+      this.listCategories.splice(this.index, 0, this.category);
+      this.$http.put('/api/categories/' + this.idCategory, this.category).then(function (response) {
+        _this2.hideModal();
+      });
+    },
     remove: function remove() {
       this.listCategories.splice(this.index, 1);
       this.hideModal();
@@ -2120,12 +2129,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getData: function getData() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.$http.get('/api/categories').then(function (response) {
-        _this2.listCategories = response.body;
+        _this3.listCategories = response.body;
       })["finally"](function (response) {
-        _this2.isLoading = false;
+        _this3.isLoading = false;
       });
     }
   },
@@ -38587,7 +38596,7 @@ var render = function() {
                                         {
                                           staticClass: "btn btn-primary",
                                           attrs: { type: "button" },
-                                          on: { click: _vm.create }
+                                          on: { click: _vm.update }
                                         },
                                         [_vm._v("Save")]
                                       )

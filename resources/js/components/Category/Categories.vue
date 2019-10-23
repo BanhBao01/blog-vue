@@ -44,7 +44,7 @@
                                     <div class="modal-footer" v-if="isDelete">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         <button type="button" class="btn btn-danger" @click="remove">Delete</button>
-                                        <button type="button" v-if="category.name != '' & category.description != ''" class="btn btn-primary" @click="create">Save</button>
+                                        <button type="button" v-if="category.name != '' & category.description != ''" class="btn btn-primary" @click="update">Save</button>
                                     </div>
                                     <div class="modal-footer" v-if="!isDelete">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -128,6 +128,14 @@ export default {
             this.isDelete = true
             this.index = idx
             this.idCategory = category.id
+        },
+        update () {
+            this.listCategories.splice(this.index,1)
+            this.listCategories.splice(this.index,0,this.category)
+            this.$http.put('/api/categories/' + this.idCategory , this.category)
+                .then(response => {
+                    this.hideModal()        
+                })
         },
         remove () {
             this.listCategories.splice(this.index,1)
