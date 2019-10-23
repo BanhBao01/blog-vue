@@ -15,9 +15,10 @@
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Login</a>
-                    </li>
+                    <router-link v-for="(link,idx) in links" :key="idx" :class="nav-item" :to="link.path" tag="li">
+                        <a class="nav-link">{{ link.name }}</a>
+                    </router-link>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="#">Register</a>
                     </li>
@@ -38,7 +39,14 @@
 
 <script>
 export default {
-
+    data () {
+        return {
+            links: [
+                {path: 'categories', name: 'Categories'},
+                {path: 'login', name: 'Login'}
+            ]
+        }
+    }
 }
 </script>
 

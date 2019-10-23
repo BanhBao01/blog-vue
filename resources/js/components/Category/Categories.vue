@@ -2,8 +2,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div v-if="isLoading">
-
+            <div v-if="isLoading" class="text-center">
+                <h1 class="mt-5">Loading...</h1>
             </div>
             <div v-if="!isLoading" class="card">
                 <div class="card-header header-custom">
