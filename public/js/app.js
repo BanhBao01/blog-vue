@@ -2268,6 +2268,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -42093,54 +42095,59 @@ var render = function() {
     "nav",
     { staticClass: "navbar navbar-expand-md navbar-light bg-white shadow-sm" },
     [
-      _c("div", { staticClass: "container" }, [
-        _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
-          _vm._v("Blog Vue")
-        ]),
-        _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "collapse navbar-collapse",
-            attrs: { id: "navbarSupportedContent" }
-          },
-          [
-            _c("ul", { staticClass: "navbar-nav mr-auto" }),
-            _vm._v(" "),
-            _c(
-              "ul",
-              { staticClass: "navbar-nav ml-auto" },
-              [
-                _vm._l(_vm.links, function(link, i) {
-                  return _c(
-                    "li",
-                    { key: i, staticClass: "nav-item" },
-                    [
-                      _c(
-                        "router-link",
-                        { attrs: { to: link.path, tag: "span" } },
-                        [
-                          _c("li", { staticClass: "nav-item" }, [
-                            _c("a", { staticClass: "nav-link" }, [
-                              _vm._v(_vm._s(link.name))
+      _c(
+        "div",
+        { staticClass: "container" },
+        [
+          _c("router-link", { attrs: { to: "/admin", tag: "span" } }, [
+            _c("a", { staticClass: "navbar-brand" }, [_vm._v("Blog Vue")])
+          ]),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse navbar-collapse",
+              attrs: { id: "navbarSupportedContent" }
+            },
+            [
+              _c("ul", { staticClass: "navbar-nav mr-auto" }),
+              _vm._v(" "),
+              _c(
+                "ul",
+                { staticClass: "navbar-nav ml-auto" },
+                [
+                  _vm._l(_vm.links, function(link, i) {
+                    return _c(
+                      "li",
+                      { key: i, staticClass: "nav-item" },
+                      [
+                        _c(
+                          "router-link",
+                          { attrs: { to: link.path, tag: "span" } },
+                          [
+                            _c("li", { staticClass: "nav-item" }, [
+                              _c("a", { staticClass: "nav-link" }, [
+                                _vm._v(_vm._s(link.name))
+                              ])
                             ])
-                          ])
-                        ]
-                      )
-                    ],
-                    1
-                  )
-                }),
-                _vm._v(" "),
-                _vm._m(1)
-              ],
-              2
-            )
-          ]
-        )
-      ])
+                          ]
+                        )
+                      ],
+                      1
+                    )
+                  }),
+                  _vm._v(" "),
+                  _vm._m(1)
+                ],
+                2
+              )
+            ]
+          )
+        ],
+        1
+      )
     ]
   )
 }
