@@ -9,7 +9,7 @@ require('./bootstrap');
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import App from './App.vue'
-import Router from './router.js'
+import router from './router.js'
 import Auth from './packages/Auth.js'
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -17,7 +17,7 @@ Vue.use(VueResource)
 Vue.use(Auth)
 Vue.use(VueSweetalert2)
 
-Router.beforeEach(
+router.beforeEach(
     (to, from, next) => {
         if (to.matched.some(record => record.meta.forVisited)) {
             if (Vue.auth.isLogin()) {
@@ -44,5 +44,5 @@ Router.beforeEach(
 new Vue({
     el: '#app',
     render: h => h(App),
-    router: Router
+    router
 })

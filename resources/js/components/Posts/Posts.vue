@@ -9,7 +9,7 @@
                 <div class="card-header header-custom">
                     <h5>Tags</h5>
                     <div>
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modelId">
+                        <button type="button" class="btn btn-secondary" @click="$router.push('posts/create')" data-target="#modelId">
                             New Post
                         </button>
                     </div>
