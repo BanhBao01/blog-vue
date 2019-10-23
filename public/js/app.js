@@ -2362,7 +2362,7 @@ __webpack_require__.r(__webpack_exports__);
       post: {
         id: 0,
         title: '',
-        photo: '',
+        image: '',
         category_id: 0,
         tags: [],
         content: ''
@@ -2393,10 +2393,15 @@ __webpack_require__.r(__webpack_exports__);
       fileReader.readAsDataURL(e.target.files[0]);
 
       fileReader.onload = function (e) {
-        _this3.post.photo = e.target.result;
+        _this3.post.image = e.target.result;
       };
 
       console.log(this.post);
+    },
+    create: function create() {
+      this.$http.post('/api/posts', this.post).then(function (response) {
+        console.log(response.body);
+      });
     }
   },
   mounted: function mounted() {
@@ -42661,7 +42666,11 @@ var render = function() {
                 [_vm._v("Cancel")]
               ),
               _vm._v(" "),
-              _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Save")])
+              _c(
+                "button",
+                { staticClass: "btn btn-primary", on: { click: _vm.create } },
+                [_vm._v("Save")]
+              )
             ])
           ])
         ])

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Photo;
 
 class AdminPostsController extends Controller
 {
@@ -34,7 +35,22 @@ class AdminPostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $explore = explode("," ,$request->image);
+        $decode = base64_decode($explore[1]);
+        if(str_contains($explore[0],'jpeg')) {
+            $extention = 'png';
+        }else{
+            $extention = 'jpg';
+        }
+        $filename = str_random() .'.' . $extention;
+        $path = public_path() . '/images/' . $filename;
+        file_put_contents($path, $decode);
+        $url =(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
+        return Photo::create([
+            'name' => $filename,
+            'path' => $url .'/images/' . $filename,
+            'size' => 0
+        ]);
     }
 
     /**

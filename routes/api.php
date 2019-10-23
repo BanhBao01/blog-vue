@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('categories', 'AdminCategoriesController');
 Route::resource('tags', 'AdminTagsController');
+Route::resource('posts', 'AdminPostsController');

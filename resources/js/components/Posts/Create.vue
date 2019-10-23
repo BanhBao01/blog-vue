@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-md-12 text-right">
                             <button class="btn btn-danger" @click="$router.push('/admin/posts')">Cancel</button>
-                            <button class="btn btn-primary">Save</button>
+                            <button class="btn btn-primary" @click="create">Save</button>
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@ export default {
             post: {
                 id: 0,
                 title: '',
-                photo: '',
+                image: '',
                 category_id: 0,
                 tags: [],
                 content: ''
@@ -86,9 +86,15 @@ export default {
             var fileReader = new FileReader();
             fileReader.readAsDataURL(e.target.files[0])
             fileReader.onload = (e) => {
-                this.post.photo = e.target.result
+                this.post.image = e.target.result
             }
             console.log(this.post);
+        },
+        create () {
+            this.$http.post('/api/posts',this.post)
+                .then(response => {
+                    console.log(response.body)
+                })
         }
     },
     mounted() {
