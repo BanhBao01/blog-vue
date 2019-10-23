@@ -23,7 +23,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="custom-file">
-                                    <input type="file" name="" id="" placeholder="" class="custom-file-input" aria-describedby="fileHelpId">
+                                    <input type="file" @change="changeImage" name="" id="" placeholder="" class="custom-file-input" aria-describedby="fileHelpId">
                                     <span class="custom-file-control">Select image</span>
                                 </label>
                             </div>
@@ -42,6 +42,10 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-danger" @click="$router.push('/admin/posts')">Cancel</button>
+                            <button class="btn btn-primary">Save</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -56,7 +60,7 @@ export default {
             post: {
                 id: 0,
                 title: '',
-                photo_id: 0,
+                photo: '',
                 category_id: 0,
                 tags: [],
                 content: ''
@@ -77,6 +81,14 @@ export default {
                 .then(response => {
                     this.tags = response.body
                 })
+        },
+        changeImage (e) {
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(e.target.files[0])
+            fileReader.onload = (e) => {
+                this.post.photo = e.target.result
+            }
+            console.log(this.post);
         }
     },
     mounted() {

@@ -2352,13 +2352,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       post: {
         id: 0,
         title: '',
-        photo_id: 0,
+        photo: '',
         category_id: 0,
         tags: [],
         content: ''
@@ -2381,6 +2385,18 @@ __webpack_require__.r(__webpack_exports__);
       this.$http.get('/api/tags').then(function (response) {
         _this2.tags = response.body;
       });
+    },
+    changeImage: function changeImage(e) {
+      var _this3 = this;
+
+      var fileReader = new FileReader();
+      fileReader.readAsDataURL(e.target.files[0]);
+
+      fileReader.onload = function (e) {
+        _this3.post.photo = e.target.result;
+      };
+
+      console.log(this.post);
     }
   },
   mounted: function mounted() {
@@ -42534,7 +42550,27 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._m(0),
+            _c("div", { staticClass: "col-md-3" }, [
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { staticClass: "custom-file" }, [
+                  _c("input", {
+                    staticClass: "custom-file-input",
+                    attrs: {
+                      type: "file",
+                      name: "",
+                      id: "",
+                      placeholder: "",
+                      "aria-describedby": "fileHelpId"
+                    },
+                    on: { change: _vm.changeImage }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "custom-file-control" }, [
+                    _vm._v("Select image")
+                  ])
+                ])
+              ])
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-md-12" }, [
               _c("div", { staticClass: "form-group" }, [
@@ -42609,6 +42645,23 @@ var render = function() {
                   0
                 )
               ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-12 text-right" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger",
+                  on: {
+                    click: function($event) {
+                      return _vm.$router.push("/admin/posts")
+                    }
+                  }
+                },
+                [_vm._v("Cancel")]
+              ),
+              _vm._v(" "),
+              _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Save")])
             ])
           ])
         ])
@@ -42616,33 +42669,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-3" }, [
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", { staticClass: "custom-file" }, [
-          _c("input", {
-            staticClass: "custom-file-input",
-            attrs: {
-              type: "file",
-              name: "",
-              id: "",
-              placeholder: "",
-              "aria-describedby": "fileHelpId"
-            }
-          }),
-          _vm._v(" "),
-          _c("span", { staticClass: "custom-file-control" }, [
-            _vm._v("Select image")
-          ])
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
