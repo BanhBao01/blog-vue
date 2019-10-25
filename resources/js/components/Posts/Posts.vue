@@ -29,13 +29,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row"></th>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                <tr v-for="(post,i) in listPosts" :key="i" @click="$router.push('posts/' + post.id + '/edit')">
+                                    <th scope="row">{{ i + 1 }}</th>
+                                    <td>{{ post.title }}</td>
+                                    <td>{{ post.sub_title }}</td>
+                                    <td>{{ post.category.name }}</td>
+                                    <td>
+                                        <code v-for="(tag,idx) in post.tags" :key="idx">{{ tag.tag }} </code>
+                                    </td>
+                                    <td v-if="post.status = 1">Public</td>
+                                    <td v-if="post.status = 0">Not Public</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -51,9 +54,24 @@
 export default {
     data () {
         return {
-            isLoading: false
+            isLoading: true,
+            listPosts: [],
         }
-    }
+    },
+    methods: {
+        getData () {
+            this.$http.get('/api/posts')
+                .then(response => {
+                    this.listPosts = response.body
+                })      
+                .finally(response => {
+                    this.isLoading = false
+                })
+        }
+    },
+    mounted() {
+        this.getData()
+    },
 }
 </script>
 

@@ -7,6 +7,7 @@ import Categories from './components/Category/Categories.vue'
 import Tags from './components/Tag/Tags.vue'
 import Posts from './components/Posts/Posts.vue'
 import CreatePost from './components/Posts/Create.vue'
+import EditPost from './components/Posts/Edit.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,7 @@ const router = new VueRouter({
             { path: 'tags', component: Tags, meta: { forAuth: true } },
             { path: 'posts', component: Posts, meta: { forAuth: true } },
             { path: 'posts/create', component: CreatePost, meta: { forAuth: true } },
+            { path: 'posts/:id/edit', component: EditPost, meta: { forAuth: true } },
         ]
     }, ]
 })
