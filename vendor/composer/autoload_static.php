@@ -486,6 +486,7 @@ class ComposerStaticInitffd2f78118af64a4822dedf345312cf7
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Http\\Resources\\PostCollection' => __DIR__ . '/../..' . '/app/Http/Resources/PostCollection.php',
         'App\\Photo' => __DIR__ . '/../..' . '/app/Photo.php',
         'App\\Post' => __DIR__ . '/../..' . '/app/Post.php',
         'App\\PostTags' => __DIR__ . '/../..' . '/app/PostTags.php',

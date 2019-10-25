@@ -2356,6 +2356,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2365,13 +2382,22 @@ __webpack_require__.r(__webpack_exports__);
         image: '',
         category_id: 0,
         tags: [],
-        content: ''
+        content: '',
+        sub_title: '',
+        status: 1
       },
       categories: [],
       tags: []
     };
   },
   methods: {
+    alert: function alert(type, title, message) {
+      this.$swal({
+        type: type,
+        title: title,
+        text: message
+      });
+    },
     getCategories: function getCategories() {
       var _this = this;
 
@@ -2399,8 +2425,18 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.post);
     },
     create: function create() {
+      var _this4 = this;
+
       this.$http.post('/api/posts', this.post).then(function (response) {
         console.log(response.body);
+
+        if (response.body.message == 'true') {
+          _this4.alert('success', 'Success', 'Create Post Success');
+
+          _this4.$router.push('/admin/posts');
+        } else {
+          _this4.alert('error', 'error', 'Create Post Error');
+        }
       });
     }
   },
@@ -2421,6 +2457,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -42579,6 +42620,40 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-md-12" }, [
               _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "" } }, [_vm._v("Sub Title")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.post.sub_title,
+                      expression: "post.sub_title"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    name: "",
+                    id: "",
+                    "aria-describedby": "helpId",
+                    placeholder: ""
+                  },
+                  domProps: { value: _vm.post.sub_title },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.post, "sub_title", $event.target.value)
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-12" }, [
+              _c("div", { staticClass: "form-group" }, [
                 _c("label", { attrs: { for: "" } }, [_vm._v("Content")]),
                 _vm._v(" "),
                 _c("textarea", {
@@ -42648,6 +42723,54 @@ var render = function() {
                     ])
                   }),
                   0
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-12" }, [
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "" } }, [_vm._v("Status")]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.post.status,
+                        expression: "post.status"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { name: "", id: "" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.post,
+                          "status",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "1" } }, [_vm._v("Show")]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "0" } }, [_vm._v("Hide")]),
+                    _vm._v(" "),
+                    _c("option")
+                  ]
                 )
               ])
             ]),
@@ -42754,7 +42877,13 @@ var staticRenderFns = [
             _c("tr", [
               _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
               _vm._v(" "),
-              _c("th", { attrs: { scope: "col" } }, [_vm._v("Name")]),
+              _c("th", { attrs: { scope: "col" } }, [_vm._v("Title")]),
+              _vm._v(" "),
+              _c("th", { attrs: { scope: "col" } }, [_vm._v("Sub Title")]),
+              _vm._v(" "),
+              _c("th", { attrs: { scope: "col" } }, [_vm._v("Category")]),
+              _vm._v(" "),
+              _c("th", { attrs: { scope: "col" } }, [_vm._v("Tags")]),
               _vm._v(" "),
               _c("th", { attrs: { scope: "col" } }, [_vm._v("Status")])
             ])
@@ -42763,6 +42892,10 @@ var staticRenderFns = [
           _c("tbody", [
             _c("tr", [
               _c("th", { attrs: { scope: "row" } }),
+              _vm._v(" "),
+              _c("td"),
+              _vm._v(" "),
+              _c("td"),
               _vm._v(" "),
               _c("td"),
               _vm._v(" "),

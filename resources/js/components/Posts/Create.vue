@@ -30,6 +30,13 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                              <label for="">Sub Title</label>
+                              <input type="text"
+                                class="form-control" v-model="post.sub_title" name="" id="" aria-describedby="helpId" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label for="">Content</label>
                                 <textarea v-model="post.content" class="form-control" name="" id="" rows="15"></textarea>
                             </div>
@@ -40,6 +47,16 @@
                                 <select multiple v-model="post.tags" class="form-control form-control-sm" name="" id="">
                                     <option v-for="(t,i) in tags" :key="i" :value="t.id">{{ t.name }}</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                              <label for="">Status</label>
+                              <select class="form-control" name="" v-model="post.status" id="">
+                                <option value="1">Show</option>
+                                <option value="0">Hide</option>
+                                <option></option>
+                              </select>
                             </div>
                         </div>
                         <div class="col-md-12 text-right">
@@ -63,13 +80,22 @@ export default {
                 image: '',
                 category_id: 0,
                 tags: [],
-                content: ''
+                content: '',
+                sub_title: '',
+                status: 1
             },
             categories: [],
             tags: []
         }
     },
     methods: {
+        alert (type,title,message) {
+            this.$swal({
+                type: type,
+                title: title,
+                text: message
+            })  
+        },
         getCategories () {
             this.$http.get('/api/categories')
                 .then(response => {
@@ -94,6 +120,12 @@ export default {
             this.$http.post('/api/posts',this.post)
                 .then(response => {
                     console.log(response.body)
+                    if(response.body.message == 'true'){
+                        this.alert('success','Success','Create Post Success')
+                        this.$router.push('/admin/posts')
+                    }else{
+                        this.alert('error','error','Create Post Error')
+                    }
                 })
         }
     },

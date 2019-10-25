@@ -8,4 +8,11 @@ class Photo extends Model
 {
     protected $table = 'photos';
     protected $fillable = ['name','path','size'];
+
+    
+    public function post()
+    {
+        return $this->hasOne(Post::class);
+    }
+    
 }

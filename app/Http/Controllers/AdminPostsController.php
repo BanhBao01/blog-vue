@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Photo;
+use App\Post;
+use App\Tag;
+use App\PostTags;
+use Validator;
+use App\Http\Resources\Posts as PostsResource;
 
 class AdminPostsController extends Controller
 {
@@ -14,7 +19,8 @@ class AdminPostsController extends Controller
      */
     public function index()
     {
-        //
+        $post = Post::with('posttags','category','photo')->get();
+        return PostsResource::collection($post);
     }
 
     /**
@@ -35,23 +41,71 @@ class AdminPostsController extends Controller
      */
     public function store(Request $request)
     {
-        $explore = explode("," ,$request->image);
-        $decode = base64_decode($explore[1]);
-        if(str_contains($explore[0],'jpeg')) {
-            $extention = 'png';
+        $validator = Validator::make($request->all(), [
+                    'title' => 'required|max:255',
+                    'image' => 'required',
+                    'category_id' => 'required',
+                    'tags' => 'required',
+                    'content' => 'required',
+                    'sub_title' => 'required'
+                ]);
+        if ($validator->fails()) {
+            return response([
+                'code' => '500',
+                'message' => 'false',
+                'message_client' => 'Not Required '
+                ]);
         }else{
-            $extention = 'jpg';
+            try {
+                $explore = explode("," ,$request->image);
+                $decode = base64_decode($explore[1]);
+                if(str_contains($explore[0],'jpeg')) {
+                    $extention = 'png';
+                }else{
+                    $extention = 'jpg';
+                }
+                $filename = str_random() .'.' . $extention;
+                $path = public_path() . '/images/' . $filename;
+                file_put_contents($path, $decode);
+                $url =(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
+                $photo = Photo::create([
+                    'name' => $filename,
+                    'path' => $url .'/images/' . $filename,
+                    'size' => 0
+                ]);
+                $post = Post::create([
+                    'title' => $request->title,
+                    'slug_title' => str_slug($request->title),
+                    'photo_id' => $photo->id,
+                    'category_id' => $request->category_id,
+                    'content' => $request->content,
+                    'sub_title' => $request->sub_title,
+                    'status' => $request->status
+                ]);
+                $tags = Tag::whereIn('id',$request->tags)->get();
+                foreach ($tags as $tag) {
+                    PostTags::create([
+                        'post_id' => $post->id,
+                        'tag_id' => $tag->id,
+                        'tag' => $tag->name
+                    ]);
+                }
+                return response([
+                    'code' => '201',
+                    'message' => 'true',
+                    'message_client' => 'Create Post Success'
+                ]);
+            } catch (\Throwable $th) {
+            //throw $th;
+                return response([
+                    'code' => '404',
+                    'message' => 'false',
+                    'message_client' => $th
+                ]);
+            }
         }
-        $filename = str_random() .'.' . $extention;
-        $path = public_path() . '/images/' . $filename;
-        file_put_contents($path, $decode);
-        $url =(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
-        return Photo::create([
-            'name' => $filename,
-            'path' => $url .'/images/' . $filename,
-            'size' => 0
-        ]);
     }
+    
 
     /**
      * Display the specified resource.
@@ -72,7 +126,8 @@ class AdminPostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::findOrfail($id);
+        return new PostsResource($post);
     }
 
     /**
@@ -95,6 +150,20 @@ class AdminPostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            Post::destroy($id);
+            return response([
+                'code' => '201',
+                'message' => 'true',
+                'message_client' => 'Delete Post Success'
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response([
+                'code' => '500',
+                'message' => 'false',
+                'message_client' => 'Delete Post Error'
+            ]);
+        }
     }
 }
