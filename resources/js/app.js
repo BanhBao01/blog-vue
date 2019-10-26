@@ -12,10 +12,14 @@ import App from './App.vue'
 import router from './router.js'
 import Auth from './packages/Auth.js'
 import VueSweetalert2 from 'vue-sweetalert2'
+import Vuex from 'vuex'
 import 'sweetalert2/dist/sweetalert2.min.css';
 Vue.use(VueResource)
 Vue.use(Auth)
 Vue.use(VueSweetalert2)
+Vue.use(Vuex)
+
+import { store } from './store/store.js'
 
 router.beforeEach(
     (to, from, next) => {
@@ -45,4 +49,5 @@ new Vue({
     el: '#app',
     render: h => h(App),
     router,
+    store
 })

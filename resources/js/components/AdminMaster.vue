@@ -2,7 +2,9 @@
     <div id="app">
         <navbar></navbar>
         <div class="py-4 container">
-            <router-view></router-view>
+            <div class="scroll-bar">
+                <router-view></router-view>
+            </div>
         </div>
     </div>
 </template>

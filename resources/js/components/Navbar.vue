@@ -15,12 +15,11 @@
                 </ul>
 
                 <!-- Right Side Of Navbar -->
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ml-auto" v-if="checkLogin | isAuth">
                     <!-- Authentication Links -->
                     <!-- <router-link v-for="(link,i) in links" :key="i" :class="nav-item" :to="link.path" tag="li">
                         <a class="nav-link">{{ link.name }}</a>
                     </router-link> -->
-                    
                     <li class="nav-item" v-for="(link,i) in links" :key="i">
                         <router-link :to="link.path" tag="span">
                             <li class="nav-item">
@@ -29,12 +28,12 @@
                         </router-link>
                     </li>
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button" @click="showDropMenu(isClick)">
                             Admin <span class="caret"></span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Logout</a>
+                            <a class="dropdown-item" @click="logout">Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -48,13 +47,38 @@ export default {
     data () {
         return {
             links: [
-                {path: '/admin/posts', name: 'Posts'},
-                {path: '/admin/categories', name: 'Categories'},
-                {path: '/admin/tags', name: 'Tags'},
-                {path: '/admin/login', name: 'Login'},
-            ]
+                {path: '/admin/posts', name: 'Posts', isAuth: true},
+                {path: '/admin/categories', name: 'Categories', isAuth: true},
+                {path: '/admin/tags', name: 'Tags', isLogin: true},
+            ],
+            isAuth: this.$auth.isLogin(),
+            isClick: true
         }
-    }
+    },
+    methods: {
+        showDropMenu (a) {
+            if(a){
+                $('.dropdown-menu-right').css('display','block')
+                this.isClick = false
+            }else{
+                $('.dropdown-menu-right').css('display','none')
+                this.isClick = true
+            }
+        },
+        logout () {
+            this.$auth.destroyToken()
+            this.$store.commit('checkLogin')
+            this.$router.push('/admin/login')
+        }
+    },
+    computed: {
+        checkLogin () {
+            return this.$store.state.isLogin
+        }
+    },
+    mounted() {
+        
+    },
 }
 </script>
 

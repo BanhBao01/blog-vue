@@ -43,7 +43,6 @@ class AdminPostsController extends Controller
     {
         $validator = Validator::make($request->all(), [
                     'title' => 'required|max:255',
-                    'image' => 'required',
                     'category_id' => 'required',
                     'tags' => 'required',
                     'content' => 'required',
@@ -57,26 +56,10 @@ class AdminPostsController extends Controller
                 ]);
         }else{
             try {
-                $explore = explode("," ,$request->image);
-                $decode = base64_decode($explore[1]);
-                if(str_contains($explore[0],'jpeg')) {
-                    $extention = 'png';
-                }else{
-                    $extention = 'jpg';
-                }
-                $filename = str_random() .'.' . $extention;
-                $path = public_path() . '/images/' . $filename;
-                file_put_contents($path, $decode);
-                $url =(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
-                $photo = Photo::create([
-                    'name' => $filename,
-                    'path' => $url .'/images/' . $filename,
-                    'size' => 0
-                ]);
                 $post = Post::create([
                     'title' => $request->title,
                     'slug_title' => str_slug($request->title),
-                    'photo_id' => $photo->id,
+                    'photo_id' => $request->photo_id,
                     'category_id' => $request->category_id,
                     'content' => $request->content,
                     'sub_title' => $request->sub_title,

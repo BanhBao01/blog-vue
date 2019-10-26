@@ -46,6 +46,14 @@ export default {
         }
     },
     methods: {
+        showAlert(title, type, message) {
+            this.$swal({
+                title: title,
+                text: message,
+                type: type,
+                confirmButtonText: 'Ok'
+            });
+        },
         login () {
             var data = {
                 client_id: 2,
@@ -59,6 +67,11 @@ export default {
                 .then(response => {
                     this.$auth.setToken(response.body.access_token,response.body.expires_in + Date.now())
                     this.$router.push('/admin')
+                    this.$store.commit('checkLogin')
+                    this.showAlert('Success','success','Login success')
+
+                }, error => {
+                    this.showAlert('Error','error','Login error !!')
                 })
         }
     }

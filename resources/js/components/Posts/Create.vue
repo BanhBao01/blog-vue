@@ -23,8 +23,10 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="custom-file">
-                                    <input type="file" @change="changeImage" name="" id="" placeholder="" class="custom-file-input" aria-describedby="fileHelpId">
-                                    <span class="custom-file-control">Select image</span>
+                                    <input type="file" disabled @change="changeImage" name="" id="" placeholder="" class="custom-file-input" aria-describedby="fileHelpId">
+                                    <span class="custom-file-control" @click="showPhoto" >
+                                        <span v-if="image_path == ''">Select image</span>  
+                                        <img :src="image_path" v-if="image_path != ''" class="custom-img img-fluid img-thumbnail" width="100px"></span> 
                                 </label>
                             </div>
                         </div>
@@ -73,6 +75,40 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Select Image</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body row">
+                        <div class="col-md-12">
+                            <div class="form-group p-1">
+                                <input type="file" class="form-control-file" @change="changeImage" name="" id="" placeholder="" aria-describedby="fileHelpId">
+                            </div>
+                        </div>
+                        <div class="col-md-12 row mx-auto">
+                            <div class="col-sm-6 col-md-3 col-lg-2 col-xl-2 p-1" v-for="(photo,index) in photos" :key="index" >
+                                <div class="card">
+                                    <div class="row no-gutters">
+                                        <div class="col-md-12">
+                                            <img :src="photo.path" class="card-img" :alt="photo.name" @click="selectImage(photo.id, photo.path)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="top-right delete-img" @click="deleteImage(photo.id,index)" aria-hidden="true">&times;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -87,10 +123,12 @@ export default {
                 title: '',
                 image: '',
                 category_id: 0,
+                photo: '',
                 tags: [],
                 content: '',
                 sub_title: '',
-                status: 1
+                status: 1,
+                photo_id: ''
             },
             categories: [],
             tags: [],
@@ -98,7 +136,9 @@ export default {
                 placeholder: '',
                 readOnly: true,
                 theme: 'snow'
-            }
+            },
+            photos: [],
+            image_path: ''
         }
     },
     components: {
@@ -129,11 +169,36 @@ export default {
             fileReader.readAsDataURL(e.target.files[0])
             fileReader.onload = (e) => {
                 this.post.image = e.target.result
+                this.$http.post('/api/photos',this.post)
+                    .then(response => {
+                        console.log(response.body)
+                        this.photos.unshift(response.body)
+                    })
             }
-            console.log(this.post);
         },
-        onEditorChange(event) {
-            console.log('onEditorChange')
+        hideModal () {
+            $('.modal').modal('hide')
+            $('.modal-backdrop').removeAttr('class')
+        },
+        showPhoto () {
+            $('.modal').modal('show')
+        },
+        selectImage (id,path) {
+            this.post.photo_id = id
+            this.image_path = path
+            this.hideModal()
+        },
+        deleteImage (id,index) {
+            this.$http.delete('/api/photos/' + id)
+                .then(response => {
+                    this.photos.splice(index,1);
+                })
+        },
+        getPhotos () {
+            this.$http.get('/api/photos')
+                .then(response => {
+                    this.photos = response.body
+                })
         },
         create () {
             this.$http.post('/api/posts',this.post)
@@ -151,10 +216,29 @@ export default {
     mounted() {
         this.getCategories()
         this.getTags()
+        this.getPhotos()
     },
 }
 </script>
 
 <style lang="scss" scoped>
-    
+    .modal {
+        height: 100%;
+    }
+    .custom-img {
+        position: absolute;
+        top: 50%;
+        right: 40%;
+    }
+    .delete-img {
+        position: absolute;
+            top: 0;
+            right: 0;
+            color: white;
+            background: #a29292;
+            border-radius: 100%;
+            padding: 0 6px;
+            font-size: 12px;
+            z-index: 100;
+        }
 </style>
