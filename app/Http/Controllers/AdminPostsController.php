@@ -138,42 +138,15 @@ class AdminPostsController extends Controller
         }else{
             try {
                 $post = Post::find($id);
-                if($request->image != null){
-                    $explore = explode("," ,$request->image);
-                    $decode = base64_decode($explore[1]);
-                    if(str_contains($explore[0],'jpeg')) {
-                        $extention = 'png';
-                    }else{
-                        $extention = 'jpg';
-                    }
-                    $filename = str_random() .'.' . $extention;
-                    $path = public_path() . '/images/' . $filename;
-                    file_put_contents($path, $decode);
-                    $url =(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}";
-                    $photo = Photo::create([
-                        'name' => $filename,
-                        'path' => $url .'/images/' . $filename,
-                        'size' => 0
-                    ]);
-                    $post->update([
-                        'title' => $request->title,
-                        'slug_title' => str_slug($request->title),
-                        'photo_id' => $photo->id,
-                        'category_id' => $request->category_id,
-                        'content' => $request->content,
-                        'sub_title' => $request->sub_title,
-                        'status' => $request->status
-                    ]);
-                }else{
-                    $post->update([
-                        'title' => $request->title,
-                        'slug_title' => str_slug($request->title),
-                        'category_id' => $request->category_id,
-                        'content' => $request->content,
-                        'sub_title' => $request->sub_title,
-                        'status' => $request->status
-                    ]);
-                }
+                $post->update([
+                    'title' => $request->title,
+                    'slug_title' => str_slug($request->title),
+                    'photo_id' => $request->photo_id,
+                    'category_id' => $request->category_id,
+                    'content' => $request->content,
+                    'sub_title' => $request->sub_title,
+                    'status' => $request->status
+                ]);
                 $tags = Tag::whereIn('id',$request->tags)->get();
                 $id_tags = $post->posttags->pluck('id');
                 PostTags::destroy($id_tags);

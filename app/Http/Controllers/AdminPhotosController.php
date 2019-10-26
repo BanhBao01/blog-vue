@@ -14,6 +14,7 @@ class AdminPhotosController extends Controller
      */
     public function index()
     {
+        // return public_path();
         return Photo::all();
     }
 
@@ -98,7 +99,7 @@ class AdminPhotosController extends Controller
     {
         try {
             $photo = Photo::find($id);
-            // \unlink($photo->name);
+            \unlink(public_path(). '/images/'.$photo->name);
             $photo->delete();
             return response([
                 'code' => '201',
