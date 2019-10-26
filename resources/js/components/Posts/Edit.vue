@@ -2,7 +2,10 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
+                <div v-if="isLoading" class="text-center">
+                    <h1 class="mt-5">Loading...</h1>
+                </div>
+                <div v-if="!isLoading" class="card">
                     <div class="card-header">New Post</div>
                     <div class="card-body row">
                         <div class="col-md-6">
@@ -37,12 +40,6 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Content</label>
-                                <textarea v-model="post.content" class="form-control" name="" id="" rows="15"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
                                 <label for="">Tags</label>
                                 <select multiple v-model="post.tags" class="form-control form-control-sm" name="" id="">
                                     <option v-for="(t,i) in tags" :key="i" :value="t.id">{{ t.name }}</option>
@@ -59,9 +56,20 @@
                               </select>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="form-group class-area">
+                                <label for="">Content</label>
+                                <quill-editor
+                                    v-model="post.content"
+                                    ref="myQuillEditor"
+                                    :options="editorOption"
+                                />
+                            </div>
+                        </div>
                         <div class="col-md-12 text-right">
-                            <button class="btn btn-danger" @click="$router.push('/admin/posts')">Cancel</button>
-                            <button class="btn btn-primary" @click="create">Save</button>
+                            <button class="btn btn-secondary" @click="$router.push('/admin/posts')">Cancel</button>
+                            <button class="btn btn-danger" @click="remove">Delete</button>
+                            <button class="btn btn-primary" @click="update">Save</button>
                         </div>
                     </div>
                 </div>
@@ -71,6 +79,8 @@
 </template>
 
 <script>
+import 'quill/dist/quill.snow.css'
+import { quillEditor } from 'vue-quill-editor'
 export default {
     data () {
         return {
@@ -86,9 +96,13 @@ export default {
             },
             categories: [],
             tags: [],
-            id: this.$route.params.id
+            id: this.$route.params.id,
+            isLoading: true
         }
     },
+    components: {
+		quillEditor
+	},
     methods: {
         alert (type,title,message) {
             this.$swal({
@@ -117,22 +131,61 @@ export default {
             }
             console.log(this.post);
         },
-        create () {
-            this.$http.post('/api/posts',this.post)
+        update () {
+            this.$http.put('/api/posts/' + this.id , this.post)
                 .then(response => {
-                    console.log(response.body)
+                    //console.log(response.body)
                     if(response.body.message == 'true'){
-                        this.alert('success','Success','Create Post Success')
+                        this.alert('success','Success','Update Post Success')
                         this.$router.push('/admin/posts')
                     }else{
-                        this.alert('error','error','Create Post Error')
+                        this.alert('error','error','Update Post Error')
                     }
+                })
+        },
+        remove () {
+            this.$swal({
+                title: 'Are you sure?',
+                text: "You want to delete this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    this.$http.delete('/api/posts/' + this.id)
+                        .then(response => {
+                            if(response.body.message == 'true'){
+                                this.alert('success','Success','Delete Post Success')
+                                this.$router.push('/admin/posts')
+                            }else{
+                                this.alert('error','error','Delete Post Error')
+                            }
+                        })
+                }
+            })
+        },
+        getData () {
+            this.$http.get('/api/posts/' + this.id + '/edit')
+                .then(response => {
+                    this.post.id = response.body.id
+                    this.post.title = response.body.title
+                    this.post.sub_title = response.body.sub_title
+                    this.post.content = response.body.content
+                    this.post.status = response.body.status,
+                    this.post.category_id = response.body.category.id,
+                    this.post.tags = response.body.tags_id
+                })
+                .finally(response => {
+                    this.isLoading = false
                 })
         }
     },
     mounted() {
         this.getCategories()
         this.getTags()
+        this.getData()
     },
 }
 </script>

@@ -37,12 +37,6 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="">Content</label>
-                                <textarea v-model="post.content" class="form-control" name="" id="" rows="15"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
                                 <label for="">Tags</label>
                                 <select multiple v-model="post.tags" class="form-control form-control-sm" name="" id="">
                                     <option v-for="(t,i) in tags" :key="i" :value="t.id">{{ t.name }}</option>
@@ -59,6 +53,18 @@
                               </select>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="form-group class-area">
+                                <label for="">Content</label>
+                                <quill-editor
+                                    v-model="post.content"
+                                    ref="myQuillEditor"
+                                    :options="editorOption"
+                                    
+                                />
+                            </div>
+                        </div>
+                        
                         <div class="col-md-12 text-right">
                             <button class="btn btn-danger" @click="$router.push('/admin/posts')">Cancel</button>
                             <button class="btn btn-primary" @click="create">Save</button>
@@ -71,6 +77,8 @@
 </template>
 
 <script>
+import 'quill/dist/quill.snow.css'
+import { quillEditor } from 'vue-quill-editor'
 export default {
     data () {
         return {
@@ -85,9 +93,17 @@ export default {
                 status: 1
             },
             categories: [],
-            tags: []
+            tags: [],
+            editorOption: {
+                placeholder: '',
+                readOnly: true,
+                theme: 'snow'
+            }
         }
     },
+    components: {
+		quillEditor
+	},
     methods: {
         alert (type,title,message) {
             this.$swal({
@@ -116,6 +132,9 @@ export default {
             }
             console.log(this.post);
         },
+        onEditorChange(event) {
+            console.log('onEditorChange')
+        },
         create () {
             this.$http.post('/api/posts',this.post)
                 .then(response => {
@@ -136,6 +155,6 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+    
 </style>

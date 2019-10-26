@@ -24,7 +24,8 @@ class Posts extends JsonResource
             'category' => $this->category,
             'photo' => $this->photo,
             'content' => $this->content,
-            'status' => $this->status
+            'status' => $this->status,
+            'tags_id' => $this->posttags->pluck('tag_id')->toArray(),
         ];
     }
 }
