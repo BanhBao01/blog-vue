@@ -1960,7 +1960,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      email: 'lesch.king@example.com',
+      email: 'kenyatta.considine@example.net',
       password: 'password'
     };
   },
@@ -1978,7 +1978,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var data = {
         client_id: 2,
-        client_secret: 'kIXokuidJfYkGdQ3w8uEtX0dP9ftwrufsXqKJv5w',
+        client_secret: 'AQid7iKga5iCQKFXCT1lNt3AY1SBu8xLAtegR2x2',
         grant_type: 'password',
         username: this.email,
         password: this.password
@@ -2307,11 +2307,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
   },
-  components: {}
+  components: {},
+  methods: {
+    login: function login() {
+      this.$auth.setToken('eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQ4OWUwODliMGE2ZjgxODUxNWNiNTZmY2M0MjNjZjMyNjljYTNiMzQwOGUwZDY2ZjU1N2Q1MmFiYzk0YWM1ZjdlM2ZkYzM3ZTNiNmU1ZGQxIn0.eyJhdWQiOiIyIiwianRpIjoiZDg5ZTA4OWIwYTZmODE4NTE1Y2I1NmZjYzQyM2NmMzI2OWNhM2IzNDA4ZTBkNjZmNTU3ZDUyYWJjOTRhYzVmN2UzZmRjMzdlM2I2ZTVkZDEiLCJpYXQiOjE1NzIxNDkwNTYsIm5iZiI6MTU3MjE0OTA1NiwiZXhwIjoxNjAzNzcxNDU2LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.V2l2Hej4JqayJD1QN1aE0cXESzWrVvJ6sV_8DvFcIhvNw4hD5JdhTUZaI-U_Il-8t9JMfqh-beLxSaVV4zrb9-L-ElCV-d1g-KOZELu5J2M75VErKMqEN493msIC2-SL4WQYGTrzdMtB7T8S8-4QCJTSXaSPzrbwtVVx9VI7rK2VSqbX9jI012gFhgKRhLXaX0IpWh8uRoRjcZhXcBzwgYhTteyZGCHr4xew-aomqhAfDkBtRHzF7K-nKaY0AJE8qb45lXKGvcvpLOzn6zHH_srrrZ6ZL7dkaqFzRW7TxFV6BKaqf2U_OR7BPzEYnAjL68aAHxmT-eOngOnjaxGeEE8qf6kWycFiGQDbotQYo_uwWO1mGwon2WH4pp2WqVTB2d4SLIOwbNHoNAO0isFGgXXaFemxPFpfmyjK8Jf8uebtNPRnQa2B6ZFuKLtbNb6lhw_ualZBSJM4jRb2thIXBOeD2W5r48aGOOA84jhr5KPVQpFiG9jKpqD3q6DO_ZPJVcGRQm9J2u-Jsi-m_2nevMHX5aCN-IN66VR2A4bmYGtblVsEd4zqQt16Sb4VnxmGjdfDomeyfjIv3rAosoDFwTAtCBJtpJusW4fbIrCSj__-0witgyTtkUVgF74BrYYCAplIyMsZrTX8Ep2sUfO4dvSFWtXxKpG55z3HfiD3pQQ', '1572180679966');
+      this.$store.commit('checkLogin');
+    },
+    logout: function logout() {
+      this.$auth.destroyToken();
+      this.$store.commit('checkLogin');
+      this.$router.push('/admin/login');
+    }
+  }
 });
 
 /***/ }),
@@ -56940,22 +56953,35 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { attrs: { id: "app" } }, [
-      _c("div", { staticClass: "py-4 container" }, [
-        _c("div", { staticClass: "scroll-bar mx-auto" }, [
-          _c("h1", [_vm._v("Home")])
-        ])
+  return _c("div", { attrs: { id: "app" } }, [
+    _c("div", { staticClass: "py-4 container" }, [
+      _c("div", { staticClass: "scroll-bar mx-auto" }, [
+        _c("h1", [_vm._v("Home")]),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-secondary",
+            attrs: { type: "button" },
+            on: { click: _vm.login }
+          },
+          [_vm._v("Local store")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-danger",
+            attrs: { type: "button" },
+            on: { click: _vm.logout }
+          },
+          [_vm._v("Remove local store")]
+        )
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -77434,8 +77460,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\haisa\Desktop\blog-vue\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\haisa\Desktop\blog-vue\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\haisa\Desktop\Resource\blog-vue\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\haisa\Desktop\Resource\blog-vue\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ }),

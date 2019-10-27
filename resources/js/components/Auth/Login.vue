@@ -41,7 +41,7 @@
 export default {
     data () {
         return {
-            email: 'lesch.king@example.com',
+            email: 'kenyatta.considine@example.net',
             password: 'password'
         }
     },
@@ -57,7 +57,7 @@ export default {
         login () {
             var data = {
                 client_id: 2,
-                client_secret: 'kIXokuidJfYkGdQ3w8uEtX0dP9ftwrufsXqKJv5w',
+                client_secret: 'AQid7iKga5iCQKFXCT1lNt3AY1SBu8xLAtegR2x2',
                 grant_type: 'password',
                 username: this.email,
                 password: this.password
